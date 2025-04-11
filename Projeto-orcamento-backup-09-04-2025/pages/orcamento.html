@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Orçamentos - Solicitações Internas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 900px;
+        }
+        .form-section {
+            border-bottom: 1px solid #dee2e6;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        .section-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+        }
+        .required-field::after {
+            content: "*";
+            color: red;
+            margin-left: 4px;
+        }
+        .preview-container {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .logo {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .btn-generate {
+            background-color: #2c3e50;
+            border-color: #2c3e50;
+            padding: 10px 30px;
+        }
+        .btn-generate:hover {
+            background-color: #34495e;
+            border-color: #34495e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="text-center mb-4">
+                <img src="imagens/logo.svg" alt="Logo" class="logo">
+                <h2 class="mb-3">Solicitação de Orçamento Interno</h2>
+                <p class="text-muted">Preencha o formulário abaixo para solicitar um orçamento detalhado</p>
+            </div>
+
+            <form id="orcamentoForm">
+                <!-- Informações Básicas -->
+                <div class="form-section">
+                    <h4 class="section-title">Informações Básicas</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Solicitante</label>
+                            <input type="text" class="form-control" required name="solicitante">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Departamento</label>
+                            <input type="text" class="form-control" required name="departamento">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Data da Solicitação</label>
+                            <input type="date" class="form-control" required name="dataSolicitacao">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Prioridade</label>
+                            <select class="form-select" required name="prioridade">
+                                <option value="">Selecione...</option>
+                                <option value="baixa">Baixa</option>
+                                <option value="media">Média</option>
+                                <option value="alta">Alta</option>
+                                <option value="urgente">Urgente</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detalhes do Projeto -->
+                <div class="form-section">
+                    <h4 class="section-title">Detalhes do Projeto</h4>
+                    <div class="mb-3">
+                        <label class="form-label required-field">Título do Projeto</label>
+                        <input type="text" class="form-control" required name="tituloProjeto">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label required-field">Situação Atual</label>
+                        <textarea class="form-control" rows="4" required placeholder="Descreva como está o sistema/processo atualmente..." name="situacaoAtual"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label required-field">Problemas Identificados</label>
+                        <textarea class="form-control" rows="4" required placeholder="Liste os principais problemas ou pontos de melhoria..." name="problemasIdentificados"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label required-field">Solução Proposta</label>
+                        <textarea class="form-control" rows="4" required placeholder="Descreva a solução proposta..." name="solucaoProposta"></textarea>
+                    </div>
+                </div>
+
+                <!-- Análise Financeira -->
+                <div class="form-section">
+                    <h4 class="section-title">Análise Financeira</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Custo por Hora do Consultor (R$)</label>
+                            <input type="number" class="form-control" id="custoHora" required min="0" step="0.01" onchange="calcularInvestimentoTotal()">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Horas Estimadas</label>
+                            <input type="number" class="form-control" id="horasEstimadas" required min="0" step="0.5" onchange="calcularInvestimentoTotal()">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Investimento Total (R$)</label>
+                            <input type="number" class="form-control" id="investimentoTotal" readonly>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Valor da Hora (R$)</label>
+                            <input type="number" class="form-control" id="valorHora" required min="0" step="0.01" onchange="calcularPayback()">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Horas Poupadas por Mês</label>
+                            <input type="number" class="form-control" id="horasPoupadas" required min="0" step="0.5" onchange="calcularPayback()">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Payback Estimado (meses)</label>
+                            <input type="number" class="form-control" id="payback" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Economia Mensal Estimada (R$)</label>
+                            <input type="number" class="form-control" id="economiaMensal" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Benefícios Financeiros Estimados</label>
+                        <textarea class="form-control" rows="3" placeholder="Descreva os benefícios financeiros esperados..." name="beneficiosFinanceiros"></textarea>
+                    </div>
+                </div>
+
+                <!-- Cronograma -->
+                <div class="form-section">
+                    <h4 class="section-title">Cronograma</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Data de Início Estimada</label>
+                            <input type="date" class="form-control" required name="dataInicio">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required-field">Data de Conclusão Estimada</label>
+                            <input type="date" class="form-control" required name="dataConclusao">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Observações do Cronograma</label>
+                        <textarea class="form-control" rows="3" placeholder="Adicione observações relevantes sobre o cronograma..." name="observacoesCronograma"></textarea>
+                    </div>
+                </div>
+
+                <!-- Anexos -->
+                <div class="form-section">
+                    <h4 class="section-title">Anexos</h4>
+                    <div class="mb-3">
+                        <label class="form-label">Documentos de Suporte</label>
+                        <input type="file" class="form-control" multiple>
+                        <small class="text-muted">Você pode anexar múltiplos arquivos (PDF, DOC, XLS)</small>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-generate">
+                        <i class="bi bi-file-pdf"></i> Gerar Orçamento em PDF
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        // Função para formatar valores monetários
+        function formatarMoeda(valor) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(valor);
+        }
+
+        function calcularInvestimentoTotal() {
+            const custoHora = parseFloat(document.getElementById('custoHora').value) || 0;
+            const horasEstimadas = parseFloat(document.getElementById('horasEstimadas').value) || 0;
+            const investimentoTotal = custoHora * horasEstimadas;
+            document.getElementById('investimentoTotal').value = investimentoTotal.toFixed(2);
+            calcularPayback();
+        }
+
+        function calcularPayback() {
+            const investimentoTotal = parseFloat(document.getElementById('investimentoTotal').value) || 0;
+            const valorHora = parseFloat(document.getElementById('valorHora').value) || 0;
+            const horasPoupadas = parseFloat(document.getElementById('horasPoupadas').value) || 0;
+            
+            const economiaMensal = valorHora * horasPoupadas;
+            document.getElementById('economiaMensal').value = economiaMensal.toFixed(2);
+            
+            if (economiaMensal > 0) {
+                const payback = investimentoTotal / economiaMensal;
+                document.getElementById('payback').value = payback.toFixed(1);
+            } else {
+                document.getElementById('payback').value = '';
+            }
+        }
+
+        document.getElementById('orcamentoForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            try {
+                // Primeiro salva o orçamento
+                const orcamentoSalvo = await salvarOrcamento();
+                
+                if (orcamentoSalvo) {
+                    // Se salvou com sucesso, tenta gerar o PDF
+                    try {
+                        const logoElement = document.querySelector('.logo');
+                        if (logoElement) {
+                            const canvas = await html2canvas(logoElement);
+                            const logoData = canvas.toDataURL('image/png');
+                            generatePDF(logoData);
+                        } else {
+                            generatePDF();
+                        }
+                    } catch (error) {
+                        console.error('Erro ao gerar PDF:', error);
+                        alert('Ocorreu um erro ao gerar o PDF: ' + error.message);
+                    }
+                    
+                    // Redireciona para o dashboard após 1 segundo
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                }
+            } catch (error) {
+                console.error('Erro ao processar formulário:', error);
+                alert('Ocorreu um erro ao processar o formulário: ' + error.message);
+            }
+        });
+
+        // Função para salvar o orçamento no localStorage
+        async function salvarOrcamento() {
+            try {
+                // Obter todos os orçamentos existentes
+                let orcamentos = JSON.parse(localStorage.getItem('orcamentos') || '[]');
+                
+                // Coletar dados do formulário
+                const orcamento = {
+                    id: Date.now().toString(),
+                    data: new Date().toISOString(),
+                    solicitante: document.querySelector('input[name="solicitante"]').value,
+                    departamento: document.querySelector('input[name="departamento"]').value,
+                    dataSolicitacao: document.querySelector('input[name="dataSolicitacao"]').value,
+                    prioridade: document.querySelector('select[name="prioridade"]').value,
+                    tituloProjeto: document.querySelector('input[name="tituloProjeto"]').value,
+                    situacaoAtual: document.querySelector('textarea[name="situacaoAtual"]').value,
+                    problemasIdentificados: document.querySelector('textarea[name="problemasIdentificados"]').value,
+                    solucaoProposta: document.querySelector('textarea[name="solucaoProposta"]').value,
+                    custoHora: parseFloat(document.getElementById('custoHora').value) || 0,
+                    horasEstimadas: parseFloat(document.getElementById('horasEstimadas').value) || 0,
+                    investimentoTotal: parseFloat(document.getElementById('investimentoTotal').value) || 0,
+                    valorHora: parseFloat(document.getElementById('valorHora').value) || 0,
+                    horasPoupadas: parseFloat(document.getElementById('horasPoupadas').value) || 0,
+                    economiaMensal: parseFloat(document.getElementById('economiaMensal').value) || 0,
+                    payback: document.getElementById('payback').value,
+                    dataInicio: document.querySelector('input[name="dataInicio"]').value,
+                    dataConclusao: document.querySelector('input[name="dataConclusao"]').value,
+                    observacoesCronograma: document.querySelector('textarea[name="observacoesCronograma"]').value,
+                    beneficiosFinanceiros: document.querySelector('textarea[name="beneficiosFinanceiros"]').value
+                };
+                
+                // Adicionar novo orçamento
+                orcamentos.push(orcamento);
+                
+                // Salvar no localStorage
+                localStorage.setItem('orcamentos', JSON.stringify(orcamentos));
+                
+                console.log('Orçamento salvo:', orcamento);
+                console.log('Total de orçamentos:', orcamentos.length);
+                
+                alert('Orçamento salvo com sucesso!');
+                return true;
+            } catch (error) {
+                console.error('Erro ao salvar orçamento:', error);
+                alert('Ocorreu um erro ao salvar o orçamento: ' + error.message);
+                return false;
+            }
+        }
+
+        function generatePDF(logoData) {
+            try {
+                const { jsPDF } = window.jspdf;
+                if (!jsPDF) {
+                    throw new Error('Biblioteca jsPDF não carregada corretamente');
+                }
+
+                // Criar PDF com orientação paisagem para mais espaço
+                const doc = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                // Configurações do documento
+                doc.setFont("helvetica");
+                
+                // Cores
+                const primaryColor = [44, 146, 213]; // #2c92d5
+                const secondaryColor = [2, 54, 103]; // #023667
+                const accentColor = [44, 146, 213]; // #2c92d5
+                
+                // Adiciona a logo se disponível
+                if (logoData) {
+                    doc.addImage(logoData, 'PNG', 20, 10, 40, 20);
+                }
+                
+                // Cabeçalho
+                doc.setFontSize(24);
+                doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                doc.text("Orçamento de Solicitação Interna", 140, 25, { align: "center" });
+                
+                // Linha divisória
+                doc.setDrawColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+                doc.setLineWidth(0.5);
+                doc.line(20, 35, 277, 35);
+                
+                // Informações Básicas
+                doc.setFontSize(14);
+                doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+                doc.text("Informações Básicas", 20, 50);
+                
+                // Selecionando campos de forma mais segura
+                const campos = {
+                    solicitante: document.querySelector('input[name="solicitante"]')?.value || 'Não informado',
+                    departamento: document.querySelector('input[name="departamento"]')?.value || 'Não informado',
+                    dataSolicitacao: document.querySelector('input[name="dataSolicitacao"]')?.value || 'Não informado',
+                    prioridade: document.querySelector('select[name="prioridade"]')?.value || 'Não informado',
+                    tituloProjeto: document.querySelector('input[name="tituloProjeto"]')?.value || 'Não informado',
+                    situacaoAtual: document.querySelector('textarea[name="situacaoAtual"]')?.value || 'Não informado',
+                    problemasIdentificados: document.querySelector('textarea[name="problemasIdentificados"]')?.value || 'Não informado',
+                    solucaoProposta: document.querySelector('textarea[name="solucaoProposta"]')?.value || 'Não informado',
+                    custoHora: parseFloat(document.getElementById('custoHora')?.value) || 0,
+                    horasEstimadas: parseFloat(document.getElementById('horasEstimadas')?.value) || 0,
+                    investimentoTotal: parseFloat(document.getElementById('investimentoTotal')?.value) || 0,
+                    valorHora: parseFloat(document.getElementById('valorHora')?.value) || 0,
+                    horasPoupadas: parseFloat(document.getElementById('horasPoupadas')?.value) || 0,
+                    economiaMensal: parseFloat(document.getElementById('economiaMensal')?.value) || 0,
+                    payback: document.getElementById('payback')?.value || 'Não calculado',
+                    dataInicio: document.querySelector('input[name="dataInicio"]')?.value || 'Não informado',
+                    dataConclusao: document.querySelector('input[name="dataConclusao"]')?.value || 'Não informado',
+                    observacoesCronograma: document.querySelector('textarea[name="observacoesCronograma"]')?.value || 'Não informado',
+                    beneficiosFinanceiros: document.querySelector('textarea[name="beneficiosFinanceiros"]')?.value || 'Não informado'
+                };
+                
+                // Estilo para labels
+                doc.setFontSize(10);
+                doc.setTextColor(100, 100, 100);
+                
+                // Estilo para valores
+                doc.setFontSize(11);
+                doc.setTextColor(0, 0, 0);
+                
+                // Informações Básicas
+                const infoBasicas = [
+                    ["Solicitante:", campos.solicitante],
+                    ["Departamento:", campos.departamento],
+                    ["Data da Solicitação:", campos.dataSolicitacao],
+                    ["Prioridade:", campos.prioridade]
+                ];
+                
+                let yPos = 60;
+                infoBasicas.forEach(([label, value]) => {
+                    doc.setTextColor(100, 100, 100);
+                    doc.text(label, 20, yPos);
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(String(value), 70, yPos);
+                    yPos += 10;
+                });
+                
+                // Linha divisória
+                doc.setDrawColor(200, 200, 200);
+                doc.line(20, yPos + 5, 277, yPos + 5);
+                
+                // Título do Projeto
+                doc.setFontSize(14);
+                doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+                doc.text("Detalhes do Projeto", 20, yPos + 20);
+                
+                doc.setFontSize(12);
+                doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                doc.text("Título do Projeto", 20, yPos + 30);
+                doc.setFontSize(11);
+                doc.setTextColor(0, 0, 0);
+                doc.text(String(campos.tituloProjeto), 20, yPos + 40);
+                
+                // Seções do Projeto
+                const secoesProjeto = [
+                    ["Situação Atual", campos.situacaoAtual],
+                    ["Problemas Identificados", campos.problemasIdentificados],
+                    ["Solução Proposta", campos.solucaoProposta]
+                ];
+                
+                yPos += 50;
+                secoesProjeto.forEach(([titulo, conteudo]) => {
+                    doc.setFontSize(12);
+                    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                    doc.text(titulo + ":", 20, yPos);
+                    doc.setFontSize(11);
+                    doc.setTextColor(0, 0, 0);
+                    const splitTexto = doc.splitTextToSize(String(conteudo), 250);
+                    doc.text(splitTexto, 20, yPos + 10);
+                    yPos += (splitTexto.length * 7) + 15;
+                });
+                
+                // Análise Financeira
+                doc.setFontSize(14);
+                doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+                doc.text("Análise Financeira", 20, yPos + 10);
+                
+                // Box para análise financeira
+                doc.setFillColor(240, 240, 240);
+                doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                doc.setLineWidth(0.5);
+                doc.roundedRect(15, yPos + 15, 260, 80, 3, 3, 'FD');
+                
+                const infoFinanceira = [
+                    ["Custo por Hora:", formatarMoeda(campos.custoHora)],
+                    ["Horas Estimadas:", String(campos.horasEstimadas)],
+                    ["Investimento Total:", formatarMoeda(campos.investimentoTotal)],
+                    ["Valor da Hora:", formatarMoeda(campos.valorHora)],
+                    ["Horas Poupadas por Mês:", String(campos.horasPoupadas)],
+                    ["Economia Mensal:", formatarMoeda(campos.economiaMensal)],
+                    ["Payback Estimado:", String(campos.payback) + " meses"]
+                ];
+                
+                yPos += 25;
+                infoFinanceira.forEach(([label, value]) => {
+                    doc.setTextColor(100, 100, 100);
+                    doc.text(label, 25, yPos);
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(String(value), 90, yPos);
+                    yPos += 10;
+                });
+                
+                // Cronograma
+                doc.setFontSize(14);
+                doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+                doc.text("Cronograma", 20, yPos + 10);
+                
+                const infoCronograma = [
+                    ["Data de Início:", campos.dataInicio],
+                    ["Data de Conclusão:", campos.dataConclusao]
+                ];
+                
+                yPos += 20;
+                infoCronograma.forEach(([label, value]) => {
+                    doc.setTextColor(100, 100, 100);
+                    doc.text(label, 20, yPos);
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(String(value), 70, yPos);
+                    yPos += 10;
+                });
+                
+                if (campos.observacoesCronograma !== 'Não informado') {
+                    doc.setTextColor(100, 100, 100);
+                    doc.text("Observações:", 20, yPos + 10);
+                    doc.setTextColor(0, 0, 0);
+                    const splitObservacoes = doc.splitTextToSize(String(campos.observacoesCronograma), 250);
+                    doc.text(splitObservacoes, 20, yPos + 20);
+                }
+                
+                // Rodapé
+                doc.setFontSize(8);
+                doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+                doc.text("Documento gerado em: " + new Date().toLocaleDateString('pt-BR'), 20, 190);
+                
+                // Linha divisória do rodapé
+                doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                doc.setLineWidth(0.5);
+                doc.line(20, 185, 277, 185);
+                
+                // Salvar o PDF
+                doc.save("orcamento.pdf");
+                
+                alert('PDF gerado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error);
+                alert('Ocorreu um erro ao gerar o PDF: ' + error.message);
+            }
+        }
+
+        // Inicializar gráfico de investimento vs economia
+        let investimentoEconomiaChart;
+        function initInvestimentoEconomiaChart() {
+            const ctx = document.getElementById('investimentoEconomiaChart').getContext('2d');
+            
+            // Destruir o gráfico existente se houver
+            if (investimentoEconomiaChart) {
+                investimentoEconomiaChart.destroy();
+            }
+            
+            investimentoEconomiaChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Investimento', 'Economia Mensal'],
+                    datasets: [{
+                        label: 'Valores (R$)',
+                        data: [
+                            parseFloat(document.getElementById('investimentoTotal').value) || 0,
+                            parseFloat(document.getElementById('economiaMensal').value) || 0
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(75, 192, 192, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(75, 192, 192)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            initInvestimentoEconomiaChart();
+        });
+
+        // Atualizar gráfico quando os valores mudarem
+        document.getElementById('investimentoTotal').addEventListener('change', initInvestimentoEconomiaChart);
+        document.getElementById('economiaMensal').addEventListener('change', initInvestimentoEconomiaChart);
+    </script>
+</body>
+</html> 

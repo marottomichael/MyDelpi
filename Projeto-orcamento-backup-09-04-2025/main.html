@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão de OS's - Janeiro 2025</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c92d5;
+            --primary-dark: #023667;
+            --secondary-color: #6c757d;
+            --accent-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --sidebar-bg: #023667;
+            --sidebar-text: #ffffff;
+            --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-color);
+        }
+        
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+        
+        .card {
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+            border: none;
+            border-radius: 8px;
+        }
+        
+        .card-title {
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-outline-danger {
+            color: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        
+        .btn-outline-danger:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+        
+        .status-pendente { 
+            background-color: var(--warning-color);
+            color: #212529;
+        }
+        
+        .status-concluido { 
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .status-em-andamento { 
+            background-color: var(--info-color);
+            color: white;
+        }
+        
+        .search-box {
+            margin-bottom: 20px;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            color: rgba(255,255,255,.8);
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: white;
+            background-color: rgba(255,255,255,.1);
+            border-radius: 5px;
+        }
+        
+        .nav-link i {
+            margin-right: 10px;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo-container img {
+            max-width: 180px;
+            height: auto;
+        }
+        
+        .table thead th {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom: none;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(44, 146, 213, 0.05);
+        }
+        
+        .input-group-text {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+        
+        .form-select:focus, .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(44, 146, 213, 0.25);
+        }
+        
+        .btn-group .btn-outline-secondary {
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-group .btn-outline-secondary:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        h2 {
+            color: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <div class="logo-container">
+                    <img src="imagens/logo.svg" alt="Logo" class="logo">
+                </div>
+                <h4 class="mb-4">Menu</h4>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-house-door"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-file-earmark-text"></i> OS's
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="orcamento.html" class="nav-link">
+                            <i class="bi bi-calculator"></i> Orçamentos
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-people"></i> Consultores
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-graph-up"></i> Relatórios
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Dashboard de OS's - <span id="mesAtual">Janeiro</span> 2025</h2>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#novaOSModal">
+                        <i class="bi bi-plus-circle"></i> Nova OS
+                    </button>
+                </div>
+
+                <!-- Filtros e Busca -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Buscar OS...">
+                            <button class="btn btn-outline-secondary">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <label class="input-group-text">Mês</label>
+                            <select class="form-select" id="filtroMes" onchange="filtrarPorMes()">
+                                <option value="1">Janeiro</option>
+                                <option value="2">Fevereiro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="btn-group">
+                            <button class="btn btn-outline-secondary">Todos</button>
+                            <button class="btn btn-outline-secondary">Pendentes</button>
+                            <button class="btn btn-outline-secondary">Em Andamento</button>
+                            <button class="btn btn-outline-secondary">Concluídos</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards de Resumo -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Total de OS's</h5>
+                                <h2 class="card-text">20</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Horas Totais</h5>
+                                <h2 class="card-text">181h30</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Consultores</h5>
+                                <h2 class="card-text">3</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Projetos</h5>
+                                <h2 class="card-text">2</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela de OS's -->
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Consultor</th>
+                    <th>Projeto</th>
+                    <th>Horas</th>
+                    <th>Atividade</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>07/01/2025</td>
+                    <td>Cleon Martinovski</td>
+                    <td>Valor Hora 2024</td>
+                    <td>08h30</td>
+                    <td>Implantação do APS</td>
+                    <td>Consultoria voltada para implantação do APS.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>08/01/2025</td>
+                    <td>Gabriel Duarte de Araujo</td>
+                    <td>Melhorias PCP - Unidade ES</td>
+                    <td>22h00</td>
+                    <td>Migração e Criação do Serviço de Web Service</td>
+                    <td>Criação de novos serviços de produção, ajustes de configurações, liberação de portas no firewall, e revisão das Querys.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>09/01/2025</td>
+                    <td>Cleon Martinovski</td>
+                    <td>Valor Hora 2024</td>
+                    <td>08h30</td>
+                    <td>Implantação do APS</td>
+                    <td>Consultoria voltada para implantação do APS.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>09/01/2025</td>
+                    <td>Gabriel Duarte de Araujo</td>
+                    <td>Melhorias PCP - Unidade ES</td>
+                    <td>09h00</td>
+                    <td>Acompanhamento e Desenvolvimento de Atividades</td>
+                    <td>Acompanhamento do desenvolvimento do APS, reuniões de alinhamento e integração de produtos no sistema.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>09/01/2025</td>
+                    <td>Pedro Henrique Lindenberg Da Silvei</td>
+                    <td>Valor Hora 2024</td>
+                    <td>04h30</td>
+                    <td>Desenvolvimento Advpl</td>
+                    <td>Desenvolvimento de validação de inclusão da OP no APS, realização de testes e ajustes de validações.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>10/01/2025</td>
+                    <td>Cleon Martinovski</td>
+                    <td>Valor Hora 2024</td>
+                    <td>08h30</td>
+                    <td>Implantação do APS</td>
+                    <td>Consultoria voltada para implantação do APS.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>10/01/2025</td>
+                    <td>Gabriel Duarte de Araujo</td>
+                    <td>Melhorias PCP - Unidade ES</td>
+                    <td>10h00</td>
+                    <td>Acompanhamento das Atividades e Ajustes no Sistema</td>
+                    <td>Acompanhamento de atividades de consultores e ajustes no banco de dados.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>11/01/2025</td>
+                    <td>Gabriel Duarte de Araujo</td>
+                    <td>Melhorias PCP - Unidade ES</td>
+                    <td>04h00</td>
+                    <td>Validação das Querys de Integração com o APS</td>
+                    <td>Validação das querys de integração e ajustes necessários nas configurações de dados do sistema.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>13/01/2025</td>
+                    <td>Pedro Henrique Lindenberg Da Silvei</td>
+                    <td>Valor Hora 2024</td>
+                    <td>08h30</td>
+                    <td>Desenvolvimento Advpl</td>
+                    <td>Finalização do desenvolvimento de workflows de produtos, ajustes no envio de e-mails e desenvolvimento de rotina para importação e exportação de arquivos.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>14/01/2025</td>
+                    <td>Pedro Henrique Lindenberg Da Silvei</td>
+                    <td>Valor Hora 2024</td>
+                    <td>08h30</td>
+                    <td>Atividades Diversas</td>
+                    <td>Desenvolvimento da rotina de importação e exportação de arquivos para pedidos do APS, utilizando a classe MSExcel.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>15/01/2025</td>
+                    <td>Gabriel Duarte de Araujo</td>
+                    <td>Valor Hora 2024</td>
+                    <td>09h00</td>
+                    <td>Atividades PCP / APS</td>
+                    <td>Ajuste no Dicionário de Dados, exclusão de OPS, e acompanhamento de atividades do APS.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>15/01/2025</td>
+                    <td>Pedro Henrique Lindenberg Da Silvei</td>
+                    <td>Valor Hora 2024</td>
+                    <td>08h30</td>
+                    <td>Desenvolvimento Advpl</td>
+                    <td>Finalização das validações para impedir a inclusão ou alteração de produtos no ponto de entrada, ajustes no importador/exportador de arquivos APS.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>16/01/2025</td>
+                    <td>Gabriel Duarte de Araujo</td>
+                    <td>Melhorias PCP - Unidade ES</td>
+                    <td>09h30</td>
+                    <td>Atividades no APS</td>
+                    <td>Desenvolvimento de etiqueta de expedição, ajustes de campos no APS, criação de rotina para reajuste de preço, e ajustes no procedimento de exclusão de OP.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>16/01/2025</td>
+                    <td>Pedro Henrique Lindenberg Da Silvei</td>
+                    <td>Valor Hora 2024</td>
+                    <td>08h30</td>
+                    <td>Atividades Diversas</td>
+                    <td>Finalização da rotina de importação/exportação de pedidos do APS, ajustes nos preços de pedidos de compra com base nas tabelas.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>17/01/2025</td>
+                    <td>Gabriel Duarte de Araujo</td>
+                    <td>Melhorias PCP - Unidade ES</td>
+                    <td>07h30</td>
+                    <td>Atividades no APS</td>
+                    <td>Adequação de rotina para encerramento/exclusão de OP, acompanhamento das atividades dos consultores, criação de procedimento para cadastro de impressoras.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>18/01/2025</td>
+                    <td>Pedro Henrique Lindenberg Da Silvei</td>
+                    <td>Valor Hora 2024</td>
+                    <td>06h00</td>
+                    <td>Atividades Diversas</td>
+                    <td>Desenvolvimento e testes da rotina de ajuste de preços dos pedidos de compra conforme tabelas de preços.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>22/01/2025</td>
+                    <td>Gabriel Duarte de Araujo</td>
+                    <td>Melhorias PCP - Unidade ES</td>
+                    <td>10h00</td>
+                    <td>Atividades APS</td>
+                    <td>Acompanhamento das validações do APS, criação de novo serviço de licença, análise de problemas com sequenciamento de programação.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>22/01/2025</td>
+                    <td>Pedro Henrique Lindenberg Da Silvei</td>
+                    <td>Valor Hora 2024</td>
+                    <td>04h30</td>
+                    <td>Desenvolvimento Advpl</td>
+                    <td>Desenvolvimento de relatório customizado baseado em relatório de compras, incluindo ajustes e adição de novos campos.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>23/01/2025</td>
+                    <td>Gabriel Duarte de Araujo</td>
+                    <td>Valor Hora 2024</td>
+                    <td>10h00</td>
+                    <td>Desenvolvimentos</td>
+                    <td>Eliminação de resíduos de SC, validação de campos no APS, extração de itens da tabela SBZ para verificação de cadastro.</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nova OS -->
+    <div class="modal fade" id="novaOSModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nova Ordem de Serviço</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Data</label>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Consultor</label>
+                            <select class="form-select">
+                                <option>Cleon Martinovski</option>
+                                <option>Gabriel Duarte de Araujo</option>
+                                <option>Pedro Henrique Lindenberg</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Projeto</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Horas</label>
+                            <input type="time" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Atividade</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descrição</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Dados das OS's por mês
+        const dadosOS = {
+            1: { // Janeiro
+                titulo: "Janeiro",
+                totalOS: 20,
+                horasTotais: "181h30",
+                consultores: 3,
+                projetos: 2,
+                osList: [
+                    {data: "07/01/2025", consultor: "Cleon Martinovski", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Implantaçao do APS", descricao: "Consultoria voltada para implantação do APS."},
+                    {data: "08/01/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Melhorias PCP - Unidade ES", horas: "22h00", atividade: "Migração e Criação do Serviço de Web Service", descricao: "Criação de novos serviços de produção, ajustes de configurações, liberação de portas no firewall, e revisão das Querys."},
+                    {data: "09/01/2025", consultor: "Cleon Martinovski", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Implantaçao do APS", descricao: "Consultoria voltada para implantação do APS."},
+                    {data: "09/01/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Melhorias PCP - Unidade ES", horas: "09h00", atividade: "Acompanhamento e Desenvolvimento de Atividades", descricao: "Acompanhamento do desenvolvimento do APS, reuniões de alinhamento e integração de produtos no sistema."},
+                    {data: "09/01/2025", consultor: "Pedro Henrique Lindenberg Da Silvei", projeto: "Valor Hora 2024", horas: "04h30", atividade: "Desenvolvimento Advpl", descricao: "Desenvolvimento de validação de inclusão da OP no APS, realização de testes e ajustes de validações."},
+                    {data: "10/01/2025", consultor: "Cleon Martinovski", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Implantaçao do APS", descricao: "Consultoria voltada para implantação do APS."},
+                    {data: "10/01/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Melhorias PCP - Unidade ES", horas: "10h00", atividade: "Acompanhamento das Atividades e Ajustes no Sistema", descricao: "Acompanhamento de atividades de consultores e ajustes no banco de dados."},
+                    {data: "11/01/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Melhorias PCP - Unidade ES", horas: "04h00", atividade: "Validação das Querys de Integração com o APS", descricao: "Validação das querys de integração e ajustes necessários nas configurações de dados do sistema."},
+                    {data: "13/01/2025", consultor: "Pedro Henrique Lindenberg Da Silvei", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Desenvolvimento Advpl", descricao: "Finalização do desenvolvimento de workflows de produtos, ajustes no envio de e-mails e desenvolvimento de rotina para importação e exportação de arquivos."},
+                    {data: "14/01/2025", consultor: "Pedro Henrique Lindenberg Da Silvei", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Atividades Diversas", descricao: "Desenvolvimento da rotina de importação e exportação de arquivos para pedidos do APS, utilizando a classe MSExcel."},
+                    {data: "15/01/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Valor Hora 2024", horas: "09h00", atividade: "Atividades PCP / APS", descricao: "Ajuste no Dicionário de Dados, exclusão de OPS, e acompanhamento de atividades do APS."},
+                    {data: "15/01/2025", consultor: "Pedro Henrique Lindenberg Da Silvei", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Desenvolvimento Advpl", descricao: "Finalização das validações para impedir a inclusão ou alteração de produtos no ponto de entrada, ajustes no importador/exportador de arquivos APS."},
+                    {data: "16/01/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Melhorias PCP - Unidade ES", horas: "09h30", atividade: "Atividades no APS", descricao: "Desenvolvimento de etiqueta de expedição, ajustes de campos no APS, criação de rotina para reajuste de preço, e ajustes no procedimento de exclusão de OP."},
+                    {data: "16/01/2025", consultor: "Pedro Henrique Lindenberg Da Silvei", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Atividades Diversas", descricao: "Finalização da rotina de importação/exportação de pedidos do APS, ajustes nos preços de pedidos de compra com base nas tabelas."},
+                    {data: "17/01/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Melhorias PCP - Unidade ES", horas: "07h30", atividade: "Atividades no APS", descricao: "Adequação de rotina para encerramento/exclusão de OP, acompanhamento das atividades dos consultores, criação de procedimento para cadastro de impressoras."},
+                    {data: "18/01/2025", consultor: "Pedro Henrique Lindenberg Da Silvei", projeto: "Valor Hora 2024", horas: "06h00", atividade: "Atividades Diversas", descricao: "Desenvolvimento e testes da rotina de ajuste de preços dos pedidos de compra conforme tabelas de preços."},
+                    {data: "22/01/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Melhorias PCP - Unidade ES", horas: "10h00", atividade: "Atividades APS", descricao: "Acompanhamento das validações do APS, criação de novo serviço de licença, análise de problemas com sequenciamento de programação."},
+                    {data: "22/01/2025", consultor: "Pedro Henrique Lindenberg Da Silvei", projeto: "Valor Hora 2024", horas: "04h30", atividade: "Desenvolvimento Advpl", descricao: "Desenvolvimento de relatório customizado baseado em relatório de compras, incluindo ajustes e adição de novos campos."},
+                    {data: "23/01/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Valor Hora 2024", horas: "10h00", atividade: "Desenvolvimentos", descricao: "Eliminação de resíduos de SC, validação de campos no APS, extração de itens da tabela SBZ para verificação de cadastro."}
+                ]
+            },
+            2: { // Fevereiro
+                titulo: "Fevereiro",
+                totalOS: 29,
+                horasTotais: "248h30",
+                consultores: 5,
+                projetos: 2,
+                osList: [
+                    {data: "04/02/2025", consultor: "Cleon Martinovski", projeto: "Valor Hora 2024", horas: "08h00", atividade: "Projeto APS", descricao: "Consultoria sobre o projeto APS."},
+                    {data: "05/02/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Valor Hora 2024", horas: "09h30", atividade: "Atividades", descricao: "Alinhamento de atividades sobre o APS, bloqueio de alterações no Cadastro de Produto X Fornecedor, e bloqueio de Pedidos de Compra sem Solicitação de Compras."},
+                    {data: "06/02/2025", consultor: "Cleon Martinovski", projeto: "Valor Hora 2024", horas: "08h00", atividade: "Projeto APS", descricao: "Serviços de consultoria no projeto APS."},
+                    {data: "06/02/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Valor Hora 2024", horas: "12h30", atividade: "Atividades", descricao: "Alinhamento de atividades com consultores, reuniões com o time de Compras, ajustes no campo Lote Múltiplo e Lote Econômico, e análise sobre a não geração de Solicitação por ponto de pedido."},
+                    {data: "07/02/2025", consultor: "Cleon Martinovski", projeto: "Valor Hora 2024", horas: "08h00", atividade: "Projeto APS", descricao: "Serviços de consultoria sobre o projeto APS."},
+                    {data: "07/02/2025", consultor: "Eduardo Kossatz Dalitz", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Desenvolvimento de Etiquetas", descricao: "Desenvolvimento de rotina para impressão de etiquetas com base no documento de entrada DLP10E04."},
+                    {data: "08/02/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Melhorias PCP - Unidade ES", horas: "15h00", atividade: "Base de Teste, Balance WS APS, Planejamento de Atividades", descricao: "Trabalho em base de teste (restauração de banco de dados, parametrização de serviços), criação de serviços para balanceamento de carga do WS do APS, e planejamento das atividades dos consultores."},
+                    {data: "08/02/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Valor Hora 2024", horas: "15h00", atividade: "Audit Trail, Migração TSS", descricao: "Trabalho sobre logs de auditoria (limpeza de parametrização indevida e configuração de logs nas tabelas SD3 e SC1), migração de serviço TSS para novos servidores e atualização da versão do serviço."},
+                    {data: "12/02/2025", consultor: "Cleon Martinovski", projeto: "Valor Hora 2024", horas: "08h00", atividade: "Projeto APS", descricao: "Serviços de consultoria sobre o projeto APS."},
+                    {data: "12/02/2025", consultor: "Eduardo Kossatz Dalitz", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Desenvolvimento de Etiquetas", descricao: "Desenvolvimento de fonte para impressão de etiquetas, com base no documento de entrada DLP10E05."},
+                    {data: "12/02/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Valor Hora 2024", horas: "09h00", atividade: "Atividades", descricao: "Análise de situações de produtos em ponto de pedido, desenvolvimento de um manual para uso da operação da Delpi."},
+                    {data: "13/02/2025", consultor: "Cleon Martinovski", projeto: "Valor Hora 2024", horas: "08h00", atividade: "Projeto APS", descricao: "Serviços de consultoria no projeto APS."},
+                    {data: "13/02/2025", consultor: "Eduardo Kossatz Dalitz", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Desenvolvimento e Validação das Etiquetas", descricao: "Finalização do desenvolvimento e validação das fontes para impressão de etiquetas com base no documento de entrada DLP10E05."},
+                    {data: "13/02/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Valor Hora 2024", horas: "09h30", atividade: "Atividades - Compras Ponto Pedido", descricao: "Levantamento das divergências apresentadas, reunião para apresentar o resultado das análises."},
+                    {data: "13/02/2025", consultor: "Luan Juliano Woichechoscki", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Desenvolvimento", descricao: "Continuação do desenvolvimento e testes dos pontos de entrada para a rotina de transferência múltipla (MATA261), alteração de consulta específica para a consulta padrão SA2, e parametrização do Audit Trail das tabelas conforme alinhado."},
+                    {data: "15/02/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Valor Hora 2024", horas: "08h00", atividade: "Atividades", descricao: "Implementação da chamada automática da rotina Ponto de Pedido nas rotinas de Processamento de Inventário e alteração de Empenho, ajuste no ponto de entrada de Alteração de produtos."},
+                    {data: "19/02/2025", consultor: "Eduardo Kossatz Dalitz", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Desenvolvimento", descricao: "Desenvolvimento de ponto de entrada (MA110BUT) para alterar a data de necessidade da solicitação de compra, além de alterações no fonte DLP10E05."},
+                    {data: "19/02/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Valor Hora 2024", horas: "09h30", atividade: "Atividades", descricao: "Ajustes no relatório Novo Extrato Produto, incluindo novos campos como Ponto de Pedido, Lead Time, Lote Mínimo, Quantidade por embalagem, entre outros."},
+                    {data: "19/02/2025", consultor: "Luan Juliano Woichechoscki", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Desenvolvimento", descricao: "Desenvolvimento da funcionalidade F7 na tela de transferência múltipla, com preenchimento automático de campos da SD3 e controle de notas."},
+                    {data: "20/02/2025", consultor: "Cleon Martinovski", projeto: "Valor Hora 2024", horas: "12h00", atividade: "Atividades APS", descricao: "Consultoria executada por Hamilton (8h) e Renis (4h) para o projeto APS."},
+                    {data: "20/02/2025", consultor: "Eduardo Kossatz Dalitz", projeto: "Valor Hora 2024", horas: "09h00", atividade: "Desenvolvimento", descricao: "Alterações no fonte DLP10E05 (inclusão de combo box e novos campos), criação de nova função DLP10G05 para cálculo de necessidade de compra, e validação de campos."},
+                    {data: "20/02/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Melhorias PCP - Unidade ES", horas: "09h30", atividade: "Atividades", descricao: "Análise das querys do APS, ajustes no relatório Novo Extrato Produto e acompanhamento das atividades dos consultores."},
+                    {data: "21/02/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Melhorias PCP - Unidade ES", horas: "09h00", atividade: "Atividades", descricao: "Ajustes na Visão de Faturamento por Segmento e validação dos itens cadastrados."},
+                    {data: "22/02/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Valor Hora 2024", horas: "07h00", atividade: "Atividades", descricao: "Continuação no desenvolvimento da Visão de Faturamento por Segmento, finalização e disponibilização para validação."},
+                    {data: "25/02/2025", consultor: "Eduardo Kossatz Dalitz", projeto: "Valor Hora 2024", horas: "09h00", atividade: "Desenvolvimento", descricao: "Validação de fontes e criação de validações e controles para os campos de quantidade e necessidade em solicitações de compra."},
+                    {data: "26/02/2025", consultor: "Luan Juliano Woichechoscki", projeto: "Valor Hora 2024", horas: "09h00", atividade: "Desenvolvimento", descricao: "Criação da tabela ZA1 para registro de movimentações de lote, ajustes nos pontos de entrada e na validação da 'nota disponível'."},
+                    {data: "27/02/2025", consultor: "Eduardo Kossatz Dalitz", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Desenvolvimento", descricao: "Desenvolvimento no ponto de entrada MT120OK para evitar a diferença de preços unitários no mesmo pedido de compra e análise do relatório DLPMATR100."},
+                    {data: "27/02/2025", consultor: "Gabriel Duarte de Araujo", projeto: "Valor Hora 2024", horas: "10h00", atividade: "Atividades", descricao: "Ajustes no Relatório Extrato Produto, acompanhamento das atividades do consultor Eduardo, e reunião de alinhamento sobre a evolução do projeto."},
+                    {data: "27/02/2025", consultor: "Luan Juliano Woichechoscki", projeto: "Valor Hora 2024", horas: "08h30", atividade: "Desenvolvimento", descricao: "Ajustes e testes na transferência múltipla de notas fiscais e ajustes nos pontos de entrada (M261FILB.prw e A261TOK.prw)."}
+                ]
+            }
+        };
+
+        // Função para filtrar por mês
+        function filtrarPorMes() {
+            const mesSelecionado = document.getElementById('filtroMes').value;
+            const dadosMes = dadosOS[mesSelecionado];
+            
+            console.log("Filtrando por mês:", mesSelecionado);
+            console.log("Dados do mês:", dadosMes);
+            console.log("Número de OS's:", dadosMes.osList.length);
+            
+            // Atualizar título
+            document.getElementById('mesAtual').textContent = dadosMes.titulo;
+            
+            // Atualizar cards de resumo
+            const cards = document.querySelectorAll('.card .card-text');
+            cards[0].textContent = dadosMes.totalOS;
+            cards[1].textContent = dadosMes.horasTotais;
+            cards[2].textContent = dadosMes.consultores;
+            cards[3].textContent = dadosMes.projetos;
+            
+            // Atualizar tabela
+            const tbody = document.querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            // Adicionar cada OS à tabela
+            dadosMes.osList.forEach(os => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${os.data}</td>
+                    <td>${os.consultor}</td>
+                    <td>${os.projeto}</td>
+                    <td>${os.horas}</td>
+                    <td>${os.atividade}</td>
+                    <td>${os.descricao}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOS(this)"><i class="bi bi-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            
+            console.log("Tabela atualizada com", dadosMes.osList.length, "OS's");
+        }
+
+        // Função para excluir OS
+        function excluirOS(button) {
+            if (confirm('Tem certeza que deseja excluir esta OS?')) {
+                const row = button.closest('tr');
+                const mesSelecionado = document.getElementById('filtroMes').value;
+                const dadosMes = dadosOS[mesSelecionado];
+                
+                // Encontrar o índice da OS na lista
+                const index = Array.from(row.parentNode.children).indexOf(row);
+                
+                // Remover a OS da lista de dados
+                dadosMes.osList.splice(index, 1);
+                
+                // Atualizar os totais
+                dadosMes.totalOS--;
+                
+                // Recalcular horas totais
+                let totalHoras = 0;
+                dadosMes.osList.forEach(os => {
+                    const [horas, minutos] = os.horas.split('h').map(num => parseInt(num) || 0);
+                    totalHoras += horas + (minutos / 60);
+                });
+                
+                const horasInt = Math.floor(totalHoras);
+                const minutos = Math.round((totalHoras - horasInt) * 60);
+                dadosMes.horasTotais = `${horasInt}h${minutos.toString().padStart(2, '0')}`;
+                
+                // Atualizar a interface
+                filtrarPorMes();
+                
+                alert('OS excluída com sucesso!');
+            }
+        }
+
+        // Inicializar com os dados de Janeiro
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM carregado, inicializando...");
+            filtrarPorMes();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Orçamentos - Janeiro 2025</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c92d5;
+            --secondary-color: #023667;
+            --primary-light: rgba(44, 146, 213, 0.1);
+            --secondary-light: rgba(2, 54, 103, 0.1);
+            --primary-dark: #1a7ab9;
+            --secondary-dark: #012a4d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #343a40;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray);
+            color: #333;
+        }
+        
+        .sidebar {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+        
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: none;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--medium-gray);
+            font-weight: 600;
+            color: var(--secondary-color);
+            padding: 15px 20px;
+            border-radius: 8px 8px 0 0 !important;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        
+        .status-pendente { 
+            background-color: var(--warning-color);
+            color: #000;
+        }
+        
+        .status-concluido { 
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .status-em-andamento { 
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .search-box {
+            margin-bottom: 20px;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            color: rgba(255,255,255,.8);
+            transition: all 0.3s;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 5px;
+        }
+        
+        .nav-link:hover {
+            color: white;
+            background-color: rgba(255,255,255,.1);
+            transform: translateX(5px);
+        }
+        
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .nav-link i {
+            margin-right: 10px;
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 10px;
+        }
+        
+        .logo-container img {
+            max-width: 180px;
+            height: auto;
+            filter: brightness(0) invert(1);
+        }
+        
+        .financial-impact {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .financial-impact:hover {
+            background-color: var(--secondary-light);
+            border-left-color: var(--secondary-color);
+        }
+        
+        .financial-impact h5 {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+        
+        .financial-impact h3 {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        .table-responsive {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 8px;
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead th {
+            background-color: var(--light-gray);
+            color: var(--secondary-color);
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .table tbody tr:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .priority-high {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+        
+        .priority-medium {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+        
+        .priority-low {
+            color: var(--success-color);
+        }
+        
+        .priority-urgent {
+            color: var(--danger-color);
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .btn-outline-secondary {
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-outline-danger {
+            color: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        
+        .btn-outline-danger:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .input-group .form-control {
+            border-radius: 8px 0 0 8px;
+            border: 1px solid var(--medium-gray);
+        }
+        
+        .input-group .btn {
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .btn-group .btn {
+            border-radius: 8px;
+            margin-right: 5px;
+        }
+        
+        .btn-group .btn:last-child {
+            margin-right: 0;
+        }
+        
+        .card-title {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+        
+        .card-text {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        h2 {
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+        
+        .page-title {
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+        
+        /* Estilo para scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--light-gray);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <div class="logo-container">
+                    <img src="imagens/logo.svg" alt="Logo" class="logo">
+                </div>
+                <h4 class="mb-4">Menu</h4>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">
+                        <a href="main.html" class="nav-link">
+                            <i class="bi bi-house-door"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-file-earmark-text"></i> OS's
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="orcamento.html" class="nav-link active">
+                            <i class="bi bi-calculator"></i> Orçamentos
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-people"></i> Consultores
+                        </a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-graph-up"></i> Relatórios
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="page-title">Dashboard de Orçamentos</h2>
+                    <a href="orcamento.html" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Novo Orçamento
+                    </a>
+                </div>
+
+                <!-- Filtros e Busca -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Buscar orçamento...">
+                            <button class="btn btn-outline-secondary">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="btn-group">
+                            <button class="btn btn-outline-secondary" id="filterAll">Todos</button>
+                            <button class="btn btn-outline-secondary" id="filterHigh">Alta Prioridade</button>
+                            <button class="btn btn-outline-secondary" id="filterMedium">Média Prioridade</button>
+                            <button class="btn btn-outline-secondary" id="filterLow">Baixa Prioridade</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards de Resumo -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Total de Orçamentos</h5>
+                                <h2 class="card-text" id="totalOrcamentos">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Investimento Total</h5>
+                                <h2 class="card-text" id="investimentoTotal">R$ 0,00</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Economia Mensal</h5>
+                                <h2 class="card-text" id="economiaMensal">R$ 0,00</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Payback Médio</h5>
+                                <h2 class="card-text" id="paybackMedio">0 meses</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráficos -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Investimento vs. Economia</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="investimentoEconomiaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Payback por Projeto</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="paybackChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Impacto Financeiro a Longo Prazo -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Impacto Financeiro a Longo Prazo</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="financial-impact">
+                                    <h5>Economia Acumulada em 12 Meses</h5>
+                                    <h3 id="economiaAnual">R$ 0,00</h3>
+                                    <p>Baseado nos orçamentos atuais</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="financial-impact">
+                                    <h5>ROI Estimado em 12 Meses</h5>
+                                    <h3 id="roiAnual">0%</h3>
+                                    <p>Retorno sobre o investimento</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-container mt-4">
+                            <canvas id="impactoLongoPrazoChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela de Orçamentos -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Lista de Orçamentos</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="orcamentosTable">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Solicitante</th>
+                                        <th>Projeto</th>
+                                        <th>Prioridade</th>
+                                        <th>Investimento</th>
+                                        <th>Economia Mensal</th>
+                                        <th>Payback</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orcamentosTableBody">
+                                    <!-- Dados serão inseridos via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Função para formatar valores monetários
+        function formatarMoeda(valor) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(valor);
+        }
+
+        // Função para formatar datas
+        function formatarData(dataString) {
+            if (!dataString) return 'Não informado';
+            const data = new Date(dataString);
+            return data.toLocaleDateString('pt-BR');
+        }
+
+        // Função para obter a classe de prioridade
+        function getPriorityClass(prioridade) {
+            switch(prioridade.toLowerCase()) {
+                case 'alta': return 'priority-high';
+                case 'média': return 'priority-medium';
+                case 'baixa': return 'priority-low';
+                case 'urgente': return 'priority-urgent';
+                default: return '';
+            }
+        }
+
+        // Função para carregar os orçamentos do localStorage
+        function carregarOrcamentos() {
+            try {
+                const orcamentos = JSON.parse(localStorage.getItem('orcamentos')) || [];
+                console.log('Orçamentos carregados:', orcamentos);
+                
+                // Atualizar contadores
+                document.getElementById('totalOrcamentos').textContent = orcamentos.length;
+                
+                // Calcular totais
+                let investimentoTotal = 0;
+                let economiaMensalTotal = 0;
+                let paybackTotal = 0;
+                let paybackCount = 0;
+                
+                orcamentos.forEach(orcamento => {
+                    investimentoTotal += orcamento.investimentoTotal || 0;
+                    economiaMensalTotal += orcamento.economiaMensal || 0;
+                    
+                    if (orcamento.payback && orcamento.payback !== 'Não calculado') {
+                        paybackTotal += parseFloat(orcamento.payback);
+                        paybackCount++;
+                    }
+                });
+                
+                // Atualizar cards de resumo
+                document.getElementById('investimentoTotal').textContent = formatarMoeda(investimentoTotal);
+                document.getElementById('economiaMensal').textContent = formatarMoeda(economiaMensalTotal);
+                
+                const paybackMedio = paybackCount > 0 ? (paybackTotal / paybackCount).toFixed(1) : 0;
+                document.getElementById('paybackMedio').textContent = paybackMedio + ' meses';
+                
+                // Calcular economia anual e ROI
+                const economiaAnual = economiaMensalTotal * 12;
+                document.getElementById('economiaAnual').textContent = formatarMoeda(economiaAnual);
+                
+                const roiAnual = investimentoTotal > 0 ? ((economiaAnual / investimentoTotal) * 100).toFixed(1) : 0;
+                document.getElementById('roiAnual').textContent = roiAnual + '%';
+                
+                // Preencher tabela
+                atualizarTabelaOrcamentos(orcamentos);
+                
+                // Gerar gráficos
+                gerarGraficos(orcamentos);
+                
+            } catch (error) {
+                console.error('Erro ao carregar orçamentos:', error);
+                alert('Ocorreu um erro ao carregar os orçamentos: ' + error.message);
+            }
+        }
+
+        // Função para gerar os gráficos
+        function gerarGraficos(orcamentos) {
+            console.log('Gerando gráficos com', orcamentos.length, 'orçamentos');
+            
+            // Verificar se os gráficos foram inicializados
+            if (!window.investimentoEconomiaChart || !window.paybackChart || !window.impactoLongoPrazoChart) {
+                console.error('Gráficos não inicializados corretamente');
+                return;
+            }
+            
+            // Atualizar dados do gráfico de Investimento vs. Economia
+            window.investimentoEconomiaChart.data.labels = orcamentos.map(o => o.tituloProjeto || 'Sem título');
+            window.investimentoEconomiaChart.data.datasets[0].data = orcamentos.map(o => o.investimentoTotal || 0);
+            window.investimentoEconomiaChart.data.datasets[1].data = orcamentos.map(o => o.economiaMensal || 0);
+            window.investimentoEconomiaChart.update();
+            
+            // Atualizar dados do gráfico de Payback
+            window.paybackChart.data.labels = orcamentos.map(o => o.tituloProjeto || 'Sem título');
+            window.paybackChart.data.datasets[0].data = orcamentos.map(o => {
+                if (o.payback && o.payback !== 'Não calculado') {
+                    return parseFloat(o.payback);
+                }
+                return 0;
+            });
+            window.paybackChart.update();
+            
+            // Calcular dados para 12 meses
+            const meses = Array.from({length: 12}, (_, i) => i + 1);
+            const economiaAcumulada = meses.map(mes => {
+                return orcamentos.reduce((total, o) => {
+                    return total + ((o.economiaMensal || 0) * mes);
+                }, 0);
+            });
+            
+            const investimentoTotal = orcamentos.reduce((total, o) => total + (o.investimentoTotal || 0), 0);
+            
+            // Atualizar dados do gráfico de Impacto a Longo Prazo
+            window.impactoLongoPrazoChart.data.labels = meses.map(m => `Mês ${m}`);
+            window.impactoLongoPrazoChart.data.datasets[0].data = economiaAcumulada;
+            window.impactoLongoPrazoChart.data.datasets[1].data = Array(12).fill(investimentoTotal);
+            window.impactoLongoPrazoChart.update();
+            
+            console.log('Gráficos atualizados com sucesso');
+        }
+
+        // Função para visualizar um orçamento específico
+        function visualizarOrcamento(id) {
+            // Redirecionar para a página de detalhes com o ID do orçamento
+            window.location.href = `detalhes_orcamento.html?id=${id}`;
+        }
+
+        // Função para excluir um orçamento
+        function excluirOrcamento(id) {
+            if (confirm('Tem certeza que deseja excluir este orçamento?')) {
+                try {
+                    let orcamentos = JSON.parse(localStorage.getItem('orcamentos')) || [];
+                    
+                    // Converter o ID para string para garantir comparação correta
+                    const idString = id.toString();
+                    console.log('ID a ser excluído:', idString, 'Tipo:', typeof idString);
+                    
+                    // Log para depuração
+                    console.log('Orçamentos antes da exclusão:', orcamentos);
+                    console.log('IDs dos orçamentos:', orcamentos.map(o => ({id: o.id, tipo: typeof o.id})));
+                    
+                    // Filtrar o orçamento a ser excluído
+                    orcamentos = orcamentos.filter(o => {
+                        const oId = o.id.toString();
+                        console.log('Comparando:', oId, 'com', idString, 'Resultado:', oId !== idString);
+                        return oId !== idString;
+                    });
+                    
+                    // Log para depuração
+                    console.log('Orçamentos após a exclusão:', orcamentos);
+                    
+                    // Salvar no localStorage
+                    localStorage.setItem('orcamentos', JSON.stringify(orcamentos));
+                    
+                    // Forçar atualização da tabela
+                    atualizarTabelaOrcamentos(orcamentos);
+                    
+                    // Recarregar os dados
+                    carregarOrcamentos();
+                    
+                    alert('Orçamento excluído com sucesso!');
+                } catch (error) {
+                    console.error('Erro ao excluir orçamento:', error);
+                    alert('Ocorreu um erro ao excluir o orçamento: ' + error.message);
+                }
+            }
+        }
+        
+        // Função para atualizar a tabela de orçamentos
+        function atualizarTabelaOrcamentos(orcamentos) {
+            const tableBody = document.getElementById('orcamentosTableBody');
+            tableBody.innerHTML = '';
+            
+            orcamentos.forEach(orcamento => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatarData(orcamento.dataSolicitacao)}</td>
+                    <td>${orcamento.solicitante || 'Não informado'}</td>
+                    <td>${orcamento.tituloProjeto || 'Não informado'}</td>
+                    <td class="${getPriorityClass(orcamento.prioridade)}">${orcamento.prioridade || 'Não informado'}</td>
+                    <td>${formatarMoeda(orcamento.investimentoTotal || 0)}</td>
+                    <td>${formatarMoeda(orcamento.economiaMensal || 0)}</td>
+                    <td>${orcamento.payback || 'Não calculado'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="visualizarOrcamento('${orcamento.id}')">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOrcamento('${orcamento.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Função para filtrar orçamentos
+        function filtrarOrcamentos(filtro) {
+            const orcamentos = JSON.parse(localStorage.getItem('orcamentos')) || [];
+            const tableBody = document.getElementById('orcamentosTableBody');
+            tableBody.innerHTML = '';
+            
+            let orcamentosFiltrados = orcamentos;
+            
+            if (filtro !== 'all') {
+                orcamentosFiltrados = orcamentos.filter(o => {
+                    return o.prioridade && o.prioridade.toLowerCase() === filtro;
+                });
+            }
+            
+            orcamentosFiltrados.forEach(orcamento => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatarData(orcamento.dataSolicitacao)}</td>
+                    <td>${orcamento.solicitante || 'Não informado'}</td>
+                    <td>${orcamento.tituloProjeto || 'Não informado'}</td>
+                    <td class="${getPriorityClass(orcamento.prioridade)}">${orcamento.prioridade || 'Não informado'}</td>
+                    <td>${formatarMoeda(orcamento.investimentoTotal || 0)}</td>
+                    <td>${formatarMoeda(orcamento.economiaMensal || 0)}</td>
+                    <td>${orcamento.payback || 'Não calculado'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="visualizarOrcamento('${orcamento.id}')">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOrcamento('${orcamento.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Função para buscar orçamentos
+        function buscarOrcamentos(termo) {
+            const orcamentos = JSON.parse(localStorage.getItem('orcamentos')) || [];
+            const tableBody = document.getElementById('orcamentosTableBody');
+            tableBody.innerHTML = '';
+            
+            const orcamentosFiltrados = orcamentos.filter(o => {
+                const termoLower = termo.toLowerCase();
+                return (
+                    (o.solicitante && o.solicitante.toLowerCase().includes(termoLower)) ||
+                    (o.tituloProjeto && o.tituloProjeto.toLowerCase().includes(termoLower)) ||
+                    (o.departamento && o.departamento.toLowerCase().includes(termoLower))
+                );
+            });
+            
+            orcamentosFiltrados.forEach(orcamento => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatarData(orcamento.dataSolicitacao)}</td>
+                    <td>${orcamento.solicitante || 'Não informado'}</td>
+                    <td>${orcamento.tituloProjeto || 'Não informado'}</td>
+                    <td class="${getPriorityClass(orcamento.prioridade)}">${orcamento.prioridade || 'Não informado'}</td>
+                    <td>${formatarMoeda(orcamento.investimentoTotal || 0)}</td>
+                    <td>${formatarMoeda(orcamento.economiaMensal || 0)}</td>
+                    <td>${orcamento.payback || 'Não calculado'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="visualizarOrcamento('${orcamento.id}')">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="excluirOrcamento('${orcamento.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Função para verificar o localStorage
+        function verificarLocalStorage() {
+            try {
+                const orcamentos = JSON.parse(localStorage.getItem('orcamentos')) || [];
+                console.log('Conteúdo do localStorage:', orcamentos);
+                
+                // Se não houver orçamentos, criar alguns de exemplo
+                if (orcamentos.length === 0) {
+                    console.log('Nenhum orçamento encontrado. Criando orçamentos de exemplo...');
+                    criarOrcamentosExemplo();
+                }
+                
+                // Teste de escrita
+                const teste = {id: 'teste', nome: 'Teste'};
+                localStorage.setItem('teste', JSON.stringify(teste));
+                const testeLido = JSON.parse(localStorage.getItem('teste'));
+                console.log('Teste de escrita/leitura:', testeLido);
+                
+                // Remover o teste
+                localStorage.removeItem('teste');
+                
+                return true;
+            } catch (error) {
+                console.error('Erro ao verificar localStorage:', error);
+                return false;
+            }
+        }
+        
+        // Função para criar orçamentos de exemplo
+        function criarOrcamentosExemplo() {
+            const orcamentosExemplo = [
+                {
+                    id: '1',
+                    dataSolicitacao: '2025-01-15',
+                    solicitante: 'João Silva',
+                    tituloProjeto: 'Automação de Processos',
+                    prioridade: 'Alta',
+                    investimentoTotal: 15000,
+                    economiaMensal: 5000,
+                    payback: '3.0'
+                },
+                {
+                    id: '2',
+                    dataSolicitacao: '2025-01-20',
+                    solicitante: 'Maria Oliveira',
+                    tituloProjeto: 'Otimização de Banco de Dados',
+                    prioridade: 'Média',
+                    investimentoTotal: 8000,
+                    economiaMensal: 2000,
+                    payback: '4.0'
+                },
+                {
+                    id: '3',
+                    dataSolicitacao: '2025-01-25',
+                    solicitante: 'Pedro Santos',
+                    tituloProjeto: 'Implementação de BI',
+                    prioridade: 'Baixa',
+                    investimentoTotal: 25000,
+                    economiaMensal: 8000,
+                    payback: '3.1'
+                }
+            ];
+            
+            localStorage.setItem('orcamentos', JSON.stringify(orcamentosExemplo));
+            console.log('Orçamentos de exemplo criados:', orcamentosExemplo);
+        }
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM carregado, inicializando...');
+            
+            // Verificar localStorage
+            if (!verificarLocalStorage()) {
+                alert('Erro ao acessar o localStorage. Algumas funcionalidades podem não funcionar corretamente.');
+            }
+            
+            // Inicializar gráficos vazios
+            inicializarGraficos();
+            
+            // Carregar orçamentos ao iniciar a página
+            console.log('Chamando carregarOrcamentos()...');
+            carregarOrcamentos();
+            
+            // Configurar filtros
+            document.getElementById('filterAll').addEventListener('click', function() {
+                filtrarOrcamentos('all');
+            });
+            
+            document.getElementById('filterHigh').addEventListener('click', function() {
+                filtrarOrcamentos('alta');
+            });
+            
+            document.getElementById('filterMedium').addEventListener('click', function() {
+                filtrarOrcamentos('média');
+            });
+            
+            document.getElementById('filterLow').addEventListener('click', function() {
+                filtrarOrcamentos('baixa');
+            });
+            
+            // Configurar busca
+            document.getElementById('searchInput').addEventListener('input', function() {
+                buscarOrcamentos(this.value);
+            });
+        });
+        
+        // Função para inicializar os gráficos vazios
+        function inicializarGraficos() {
+            console.log('Inicializando gráficos...');
+            
+            // Gráfico de Investimento vs. Economia
+            const investimentoEconomiaCtx = document.getElementById('investimentoEconomiaChart');
+            if (!investimentoEconomiaCtx) {
+                console.error('Elemento canvas investimentoEconomiaChart não encontrado');
+                return;
+            }
+            
+            const investimentoEconomiaCtx2d = investimentoEconomiaCtx.getContext('2d');
+            window.investimentoEconomiaChart = new Chart(investimentoEconomiaCtx2d, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Investimento (R$)',
+                            data: [],
+                            backgroundColor: 'rgba(44, 146, 213, 0.7)',
+                            borderColor: 'rgba(44, 146, 213, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Economia Mensal (R$)',
+                            data: [],
+                            backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                            borderColor: 'rgba(40, 167, 69, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Gráfico de Payback
+            const paybackCtx = document.getElementById('paybackChart');
+            if (!paybackCtx) {
+                console.error('Elemento canvas paybackChart não encontrado');
+                return;
+            }
+            
+            const paybackCtx2d = paybackCtx.getContext('2d');
+            window.paybackChart = new Chart(paybackCtx2d, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Payback (meses)',
+                        data: [],
+                        backgroundColor: 'rgba(2, 54, 103, 0.7)',
+                        borderColor: 'rgba(2, 54, 103, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Gráfico de Impacto a Longo Prazo
+            const impactoLongoPrazoCtx = document.getElementById('impactoLongoPrazoChart');
+            if (!impactoLongoPrazoCtx) {
+                console.error('Elemento canvas impactoLongoPrazoChart não encontrado');
+                return;
+            }
+            
+            const impactoLongoPrazoCtx2d = impactoLongoPrazoCtx.getContext('2d');
+            window.impactoLongoPrazoChart = new Chart(impactoLongoPrazoCtx2d, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Economia Acumulada (R$)',
+                            data: [],
+                            backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                            borderColor: 'rgba(40, 167, 69, 1)',
+                            borderWidth: 2,
+                            fill: true
+                        },
+                        {
+                            label: 'Investimento Total (R$)',
+                            data: [],
+                            backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                            borderColor: 'rgba(220, 53, 69, 1)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            console.log('Gráficos inicializados com sucesso');
+        }
+    </script>
+</body>
+</html> 
